@@ -42,9 +42,6 @@ This architecture allows the model to capture complex features necessary for ide
 
 Results are logged during the training process, including metrics such as accuracy, loss, and area under the curve (AUC).
 
-### Interpreting Results
-- Higher accuracy indicates better model performance in correctly classifying the abnormalities.
-- AUC values closer to 1 signify an excellent model in distinguishing between classes.
 
 ## Acknowledgments
 
