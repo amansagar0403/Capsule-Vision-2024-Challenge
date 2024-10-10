@@ -19,6 +19,8 @@ The dataset consists of video frames from capsule endoscopy procedures, containi
 
 ### Source
 - The dataset is a combination of publicly available datasets and private collections, specifically curated for this competition.
+- [Training and Validation Dataset of Capsule Vision 2024 Challenge](https://figshare.com/articles/dataset/Training_and_Validation_Dataset_of_Capsule_Vision_2024_Challenge/26403469?file=48018562)
+
 
 ### Structure
 - The dataset is organized into training and validation directories, with subdirectories representing each class of abnormalities.
