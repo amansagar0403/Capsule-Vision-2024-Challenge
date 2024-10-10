@@ -12,3 +12,43 @@ To run the project, use the following command in your terminal:
 
 ```bash
 python finalSubmission.py
+`
+
+## Dataset Information
+
+The dataset consists of video frames from capsule endoscopy procedures, containing various gastrointestinal abnormalities.
+
+### Source
+- The dataset is a combination of publicly available datasets and private collections, specifically curated for this competition.
+
+### Structure
+- The dataset is organized into training and validation directories, with subdirectories representing each class of abnormalities.
+
+### Preprocessing Steps
+- Images are resized to a uniform dimension.
+- Data augmentation techniques are applied to improve model robustness.
+
+## Model Architecture
+
+The model is built using a hybrid architecture that combines the strengths of ResNet and DenseNet.
+
+### Layers
+- Convolutional layers for feature extraction.
+- Batch normalization and dropout layers to prevent overfitting.
+- A fully connected layer customized for multi-class classification.
+
+This architecture allows the model to capture complex features necessary for identifying the abnormalities in the video frames.
+
+## Results
+
+Results are logged during the training process, including metrics such as accuracy, loss, and area under the curve (AUC).
+
+### Interpreting Results
+- Higher accuracy indicates better model performance in correctly classifying the abnormalities.
+- AUC values closer to 1 signify an excellent model in distinguishing between classes.
+
+## Acknowledgments
+
+- Capsule Vision Competition organizers for providing the dataset and competition platform.
+- Various open-source libraries and frameworks (e.g., TensorFlow, PyTorch) that facilitated the development of this project.
+
