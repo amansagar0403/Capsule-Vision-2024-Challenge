@@ -12,7 +12,6 @@ To run the project, use the following command in your terminal:
 
 ```bash
 python finalSubmission.py
-`
 
 ## Dataset Information
 
