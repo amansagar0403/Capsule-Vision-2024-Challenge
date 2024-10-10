@@ -1,6 +1,5 @@
 # Capsule-Vision-2024-Challenge
 
-# Capsule Vision Competition 2024
 
 ## Project Title: Automated Classification of Video Capsule Endoscopy Abnormalities
 
