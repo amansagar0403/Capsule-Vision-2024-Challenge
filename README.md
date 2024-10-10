@@ -11,7 +11,7 @@ The purpose of this project is to develop a deep learning model that automatical
 To run the project, use the following command in your terminal:
 
 ```bash
-python finalSubmission.py
+python FinalSubmission.py
 ```
 ## Dataset Information
 
