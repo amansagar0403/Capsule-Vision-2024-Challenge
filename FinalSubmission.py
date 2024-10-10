@@ -253,79 +253,39 @@ plt.show()
 torch.save(combined_model.state_dict(), 'combined_model.pth')
 
 
-# Testing phase
+# Testing phase for labeling an unlabeled dataset
 """
-# Load the test dataset using ImageFolder (ensure you have the correct path)
-test_data_path = 'Dataset/test'  # Change to your test data path
+# Load the unlabeled dataset using ImageFolder (make sure to set the correct path)
+test_data_path = 'Dataset/unlabeled_test'  # Update this with the path to your unlabeled test images
 test_dataset = datasets.ImageFolder(test_data_path, transform=data_transforms['val'])
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
-# Evaluate the model on the test dataset
-combined_model.eval()  # Set model to evaluation mode
-test_loss = 0.0
-test_correct = 0
-test_total = 0
-all_test_labels = []
-all_test_preds = []
-all_test_probs = []
+# We'll create two lists: one for storing the image file paths and another for their predicted labels
+image_paths = []  # This will hold the file paths of the images
+predicted_labels = []  # This will store the predicted class labels for each image
 
-with torch.no_grad():  # Disable gradient calculation for testing
-    for inputs, labels in test_loader:
-        inputs, labels = inputs.to(device), labels.to(device)  # Move data to the appropriate device
-        outputs = combined_model(inputs)  # Forward pass
-        loss = criterion(outputs, labels)  # Calculate loss
-        test_loss += loss.item()  # Accumulate test loss
+# Set the model to evaluation mode, so we don't accidentally update weights during predictions
+combined_model.eval()
+
+# Start predicting labels for each image in the unlabeled dataset
+with torch.no_grad():  # We don't need gradients for this, so let's turn them off
+    for inputs, paths in test_loader:  # Loop through the test images and their file paths
+        inputs = inputs.to(device)  # Move the images to the correct device (GPU or CPU)
+        outputs = combined_model(inputs)  # Get the model's predictions
         
-        _, preds = torch.max(outputs, 1)  # Get predictions
-        test_correct += (preds == labels).sum().item()  # Count correct predictions
-        test_total += labels.size(0)  # Count total examples
+        # Convert the model's outputs into predicted class labels
+        _, preds = torch.max(outputs, 1)  # 'preds' will hold the index of the predicted class
         
-        probs = nn.functional.softmax(outputs, dim=1)  # Calculate predicted probabilities
-        all_test_labels.extend(labels.cpu().numpy())  # Store true labels
-        all_test_preds.extend(preds.cpu().numpy())  # Store predictions
-        all_test_probs.extend(probs.cpu().numpy())  # Store predicted probabilities
+        # Save the image file paths and the corresponding predicted labels
+        image_paths.extend(paths)  # Add the image paths to our list
+        predicted_labels.extend(preds.cpu().numpy())  # Convert the predictions to CPU and add to our list
 
-# Calculate average test loss and accuracy
-average_test_loss = test_loss / len(test_loader)
-test_accuracy = test_correct / test_total
+# Now let's associate each image with its predicted class label
+for img_path, label in zip(image_paths, predicted_labels):
+    print(f"Image: {img_path}, Predicted Class: {test_dataset.classes[label]}")
 
-# Print test metrics
-print(f'Test Loss: {average_test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}')
-
-# Generate confusion matrix for test dataset
-conf_matrix_test = confusion_matrix(all_test_labels, all_test_preds)
-plt.figure(figsize=(10, 8))
-sns.heatmap(conf_matrix_test, annot=True, fmt='d', cmap='Blues', xticklabels=test_dataset.classes, yticklabels=test_dataset.classes)
-plt.xlabel('Predicted')
-plt.ylabel('True')
-plt.title('Test Confusion Matrix')
-plt.savefig('plotsFinal/test_confusion_matrix.png')  # Save the test confusion matrix plot
-plt.show()
-
-# Print classification report for test dataset
-print('Test Classification Report:')
-print(classification_report(all_test_labels, all_test_preds, target_names=test_dataset.classes))
-
-# ROC Curve generation for test dataset
-all_test_labels_bin = label_binarize(all_test_labels, classes=range(len(test_dataset.classes)))  # Binarize the labels for ROC
-fpr_test = dict()  # Dictionary to store false positive rates
-tpr_test = dict()  # Dictionary to store true positive rates
-roc_auc_test = dict()  # Dictionary to store AUC values
-
-# Calculate ROC curve and AUC for each class on test dataset
-for i in range(len(test_dataset.classes)):
-    fpr_test[i], tpr_test[i], _ = roc_curve(all_test_labels_bin[:, i], np.array(all_test_probs)[:, i])
-    roc_auc_test[i] = auc(fpr_test[i], tpr_test[i])
-
-# Plotting ROC Curve for test dataset
-plt.figure(figsize=(10, 8))
-for i in range(len(test_dataset.classes)):
-    plt.plot(fpr_test[i], tpr_test[i], label=f'Test Class {test_dataset.classes[i]} (AUC = {roc_auc_test[i]:.2f})')
-plt.plot([0, 1], [0, 1], 'k--', lw=2)  # Diagonal line for chance level
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Test Receiver Operating Characteristic (ROC) Curve')
-plt.legend(loc='lower right')
-plt.savefig('plotsFinal/test_roc_curve.png')  # Save the test ROC curve plot
-plt.show()
+# If needed, you can write these results to a file for future use
+with open('predicted_labels.txt', 'w') as f:
+    for img_path, label in zip(image_paths, predicted_labels):
+        f.write(f"Image: {img_path}, Predicted Class: {test_dataset.classes[label]}\n")
 """
