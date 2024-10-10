@@ -40,6 +40,10 @@ The model is built using a hybrid architecture that combines the strengths of Re
 
 This architecture allows the model to capture complex features necessary for identifying the abnormalities in the video frames.
 
+### Access the Model  
+The trained model and additional resources can be found in the following Google Drive link:  
+[Model](https://drive.google.com/drive/folders/1X68Qk8ovbCSkrWEt2myyXQ_JBl9AOlMz?usp=sharing)
+
 ## Results
 
 Results are logged during the training process, including metrics such as accuracy, loss, and area under the curve (AUC).
