@@ -12,7 +12,7 @@ To run the project, use the following command in your terminal:
 
 ```bash
 python finalSubmission.py
-
+```
 ## Dataset Information
 
 The dataset consists of video frames from capsule endoscopy procedures, containing various gastrointestinal abnormalities.
